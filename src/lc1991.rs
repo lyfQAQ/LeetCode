@@ -26,10 +26,26 @@ impl Solution {
         }
         pos
     }
+    pub fn pivot_index_plus(nums: Vec<i32>) -> i32 {
+        let sum: i32 = nums.iter().sum();
+        let n = nums.len();
+        let mut partial = 0;
+        let mut i = 0;
+        let mut pos = -1;
+        while i < n {
+            if partial == sum - partial - nums[i] {
+                pos = i as i32;
+                break;
+            }
+            partial += nums[i];
+            i += 1;
+        }
+        pos
+    }
 }
 
 #[test]
 fn test_fn() {
     let nums = vec![1,7,3,6,5,6];
-    println!("{}", Solution::pivot_index(nums));
+    println!("{}", Solution::pivot_index_plus(nums));
 }
