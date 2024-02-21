@@ -1,21 +1,25 @@
+use std::io::Read;
+
 struct Solution;
 
 impl Solution {
-    pub fn rearrange_characters(s: String, target: String) -> i32 {
-        let count = |s: String| {
-            s.bytes().fold([0; 26], |mut acc, b| {
-                acc[(b - b'a') as usize] += 1;
-                acc
+    pub fn is_alien_sorted(words: Vec<String>, order: String) -> bool {
+        let mut weight = [0; 26];
+        // 做一个映射  "hlabcdefgijkmnopqrstuvwxyz"
+        // h->a  l->b
+        for (i, ch) in order.bytes().enumerate() {
+            weight[(ch - b'a') as usize] = i + b'a' as usize;
+        }
+        let words = words
+            .into_iter()
+            .map(|s| {
+                s.bytes()
+                    .map(|c| weight[(c - b'a') as usize])
+                    .collect::<Vec<_>>()
             })
-        };
-
-        let cnt_s = count(s);
-        let cnt_t = count(target);
-        cnt_t
-            .iter()
-            .zip(cnt_s.iter())
-            .filter_map(|(&tc, &sc)| if tc > 0 { Some(sc / tc) } else { None })
-            .min()
-            .unwrap_or(0)
+            .collect::<Vec<_>>();
+        let mut sorted = words.clone();
+        sorted.sort();
+        sorted == words
     }
 }
